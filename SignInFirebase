@@ -8,10 +8,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class SignInUpFirebase {
+public class SignInFirebase {
     private FirebaseAuth mAuth;
 
-    public SignInUpFirebase(String email, String password, final Activity activity) {
+    public SignInFirebase(String email, String password, final Activity activity) {
         mAuth = FirebaseAuth.getInstance();
         if (TextUtils.isEmpty(email)) {
             Toast.makeText(activity.getApplicationContext(), "Please enter email id", Toast.LENGTH_SHORT).show();
