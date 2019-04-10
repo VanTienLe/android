@@ -1,0 +1,44 @@
+import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+
+public class SignInUpFirebase {
+    private FirebaseAuth mAuth;
+
+    public SignInUpFirebase(String email, String password, final Activity activity) {
+        mAuth = FirebaseAuth.getInstance();
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(activity.getApplicationContext(), "Please enter email id", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(activity.getApplicationContext(), "Enter Password", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        //progressBar.setVisibility(View.VISIBLE);
+        //authenticate user
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        //progressBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            Toast.makeText(activity, "Oke", Toast.LENGTH_SHORT).show();
+                            //Intent intent = new Intent(context, HomeActivity.class);
+                            //startActivity(intent);
+                            //finish();
+                        } else {
+                            Toast.makeText(activity, "fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                });
+    }
+
+}
