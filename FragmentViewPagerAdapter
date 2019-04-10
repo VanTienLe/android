@@ -1,1 +1,50 @@
-1111
+import android.content.Context;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+//import android.support.design.widget.TabLayout;
+//import android.support.v4.view.ViewPager;
+
+//        FragmentPagerAdapter adapter = new FragmentViewPagerAdapter(getSupportFragmentManager(), MainActivity.this);
+//        viewPager.setAdapter(adapter);
+//        tabLayout.setupWithViewPager(viewPager,true);
+
+public class FragmentViewPagerAdapter extends FragmentPagerAdapter {
+    Context context;
+    public FragmentViewPagerAdapter(FragmentManager fm,Context context) {
+        super(fm);
+        this.context = context;
+    }
+
+    @Override
+    public Fragment getItem(int i) {
+        Fragment fragment = null;
+        if (i == 0) {
+            fragment = new Blank1Fragment();
+        } else {
+            fragment = new Blank2Fragment();
+        }
+        return fragment;
+    }
+
+    @Override
+    public int getCount() {
+        return 2;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        String title = "";
+        switch (position){
+            case 0:
+                title = "tab1";
+                break;
+            case 1:
+                title = "tab2";
+                break;
+        }
+        return title;
+    }
+
+}
