@@ -1,0 +1,152 @@
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+
+public class DBHelper {
+String DATABASE_NAME = "AppWeather.db";
+    private static final String DB_PATH_SUFFIX = "/databases/";
+    SQLiteDatabase db = null;
+
+    Context context;
+
+    public DBHelper(Context context) {
+        this.context = context;
+        processSQLite();
+    }
+
+    private void processSQLite() {
+        File dbFile = context.getDatabasePath(DATABASE_NAME);
+        if(!dbFile.exists()){
+            try{
+                CopyDatabaseFromAsset();
+                Toast.makeText(context, "Copy successful !!!", Toast.LENGTH_SHORT).show();
+
+            }catch (Exception ex){
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void CopyDatabaseFromAsset() {
+        try{
+            InputStream databaseInputStream = context.getAssets().open(DATABASE_NAME);
+
+            String outputStream = getPathDatabaseSystem();
+
+            File file = new File(context.getApplicationInfo().dataDir + DB_PATH_SUFFIX);
+            if(!file.exists()){
+                file.mkdir();
+            }
+
+            OutputStream databaseOutputStream = new FileOutputStream(outputStream);
+
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = databaseInputStream.read(buffer)) > 0){
+                databaseOutputStream.write(buffer,0,length);
+            }
+
+
+            databaseOutputStream.flush();
+            databaseOutputStream.close();
+            databaseInputStream.close();
+
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    private String getPathDatabaseSystem() {
+        return context.getApplicationInfo().dataDir + DB_PATH_SUFFIX + DATABASE_NAME;
+    }
+
+    public int GetUnitTemp(){
+        int unit = 0;
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        Cursor cursor = db.query("Setting",null,null,
+                null,null,null,null);
+        if (cursor.moveToFirst()){
+            unit = cursor.getInt(0);
+        }
+        return unit;
+    }
+
+    public void updateSettings( int language, int unittemp){
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Applanguage",language);
+        contentValues.put("Unittemp",unittemp);
+        db.update("Setting",contentValues,null,null);
+    }
+
+    public int GetLanguage(){
+        int language = 0;
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        Cursor cursor = db.query("Setting",null,null,
+                null,null,null,null);
+        if (cursor.moveToFirst()){
+            language = cursor.getInt(1);
+        }
+        return language;
+    }
+
+    public ArrayList<String> GetCityName(){
+        ArrayList<String> arrayList = new ArrayList<>();
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        Cursor cursor = db.query("Quanlythanhpho",
+                null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            String name = cursor.getString(1);
+            arrayList.add(name);
+        }
+        return arrayList;
+    }
+
+    public int getslCity(){
+        int dem = 0;
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        Cursor cursor = db.query("Quanlythanhpho",
+                null,null,null,null,null,null);
+        while (cursor.moveToNext()){
+            dem = dem + 1;
+        }
+        return dem;
+    }
+
+    public void addCity(String cityName, int idcity){
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Cityname",cityName);
+        contentValues.put("Idcity", idcity);
+        db.insert("Quanlythanhpho",null,contentValues);
+    }
+
+    public void deleteCity(int cityID){
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        db.delete("Quanlythanhpho","Idcity=" + cityID,null);
+    }
+
+    public Bitmap GetImages(int idimage){
+        Bitmap theImage = null;
+        db = context.openOrCreateDatabase(DATABASE_NAME,Context.MODE_PRIVATE,null);
+        Cursor cursor = db.query("Images",
+                null,null,null,null,null,null);
+        if (cursor.moveToPosition(idimage)){
+            byte[] data = cursor.getBlob(1);
+            ByteArrayInputStream imageStream = new ByteArrayInputStream(data);
+            theImage = BitmapFactory.decodeStream(imageStream);
+        }
+        return theImage;
+    }
+}
