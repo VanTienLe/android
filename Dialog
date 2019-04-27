@@ -1,0 +1,27 @@
+///AlertDialog
+import android.app.AlertDialog;
+
+AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+builder.setTitle("Tieu de Dialog");
+builder.setIcon(R.drawable.ic_launcher_background);
+builder.setMessage("Day la Alert Dialog");
+builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+    }
+});
+builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+    }
+});
+builder.setNeutralButton("Cancel", new DialogInterface.OnClickListener() {
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+    }
+});
+AlertDialog alertDialog = builder.create();
+alertDialog.show();
