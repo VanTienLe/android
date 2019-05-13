@@ -1,0 +1,45 @@
+private void SetBackgroundDung(TextView tv){
+
+        Drawable backgrounds[] = new Drawable[2];
+        backgrounds[0] = getDrawable(R.drawable.item_cauhoi);
+        backgrounds[1] = getDrawable(R.drawable.item_cauhoi2);
+        TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+        tv.setBackground(crossfader);
+        crossfader.startTransition(500);
+
+//        ColorDrawable[] color = {new ColorDrawable(getResources().getColor(R.color.xam)),
+//                new ColorDrawable(Color.GREEN)};
+//        TransitionDrawable trans = new TransitionDrawable(color);
+//        tv.setBackground(trans);
+//        trans.startTransition(500);
+    }
+    
+cauhoi.xml
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <stroke
+        android:width="2dp"
+        android:color="@color/LightBlue600"/>
+
+    <solid
+        android:color="@color/White"/>
+    <!--<corners-->
+        <!--android:radius="5dp"/>-->
+
+</shape>
+
+cauhoi2.xml
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <stroke
+        android:width="2dp"
+        android:color="@color/LightBlue600"/>
+
+    <solid
+        android:color="@color/LightBlue600"/>
+    <!--<corners-->
+        <!--android:radius="5dp"/>-->
+
+</shape>
